@@ -1,0 +1,18 @@
+HELP.md
+build/
+!**src/main/**
+!java
+
+### Idea ###
+/.idea
+*.iws
+*.iml
+*.ipr
+
+### Gradle ###
+/.gradle
+
+### Logs ###
+*.log
+
+*.DS_Store
