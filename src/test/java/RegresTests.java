@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -40,20 +41,27 @@ public class RegresTests {
     void successfulRegisterTest() {
         String authData = "{\"email\": \"eve.holt@reqres.in\", \"password\": \"pistol\"}";
 
-        given()
-                .body(authData)
-                .contentType(JSON)
-                .log().uri()
+        String token =
+                given()
+                        .body(authData)
+                        .contentType(JSON)
+                        .log().uri()
 
-                .when()
-                .post("/register")
+                        .when()
+                        .post("/register")
 
-                .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
-                .body("id", is(4))
-                .body("token", notNullValue());
+                        .then()
+                        .log().status()
+                        .log().body()
+                        .statusCode(200)
+                        .body("id", is(4))
+                        .extract().path("token");
+
+
+        assertThat(token)
+                .isNotNull()
+                .hasSizeGreaterThan(10)
+                .matches("[a-zA-Z0-9]+");
     }
 
     @Test
